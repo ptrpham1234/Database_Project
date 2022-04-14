@@ -21,9 +21,9 @@ CREATE TABLE EMPLOYEE (
     Salary DECIMAL(10 , 2 ),
     Super_ssn CHAR(9),
     CONSTRAINT pk_employee PRIMARY KEY (Ssn),
-    CONSTRAINT super_emp FOREIGN KEY (Super_ssn) references EMPLOYEE(Ssn)
+    CONSTRAINT super_emp FOREIGN KEY (Super_ssn)
+        REFERENCES EMPLOYEE (Ssn)
 );
-
 
 DROP TABLE IF EXISTS DEPARTMENT;
 CREATE TABLE DEPARTMENT (
@@ -34,54 +34,69 @@ CREATE TABLE DEPARTMENT (
     CONSTRAINT pk_Department PRIMARY KEY (Dnumber),
     CONSTRAINT uk_dname UNIQUE (Dname),
     CONSTRAINT uk_storeID UNIQUE (store_ID),
-    CONSTRAINT manager FOREIGN KEY (Mgr_ID) references EMPLOYEE(emp_ID)
+    CONSTRAINT manager FOREIGN KEY (Mgr_ID)
+        REFERENCES EMPLOYEE (emp_ID)
 );
 
 
 DROP TABLE IF EXISTS STORE;
 CREATE TABLE STORE (
-  store_ID    INT(5),
-  manager_ID  INT(10), 
-  store_phone INT(10),
-  store_addr VARCHAR(50),
-  store_type ENUM("general", "clothing", "shoe"),
-  CONSTRAINT pk_stores PRIMARY KEY (store_ID),
-  CONSTRAINT uk_store_location UNIQUE (store_addr),
-  CONSTRAINT uk_store_phone UNIQUE (store_phone)
+    store_ID INT(5),
+    manager_ID INT(10),
+    store_phone INT(10),
+    store_addr VARCHAR(50),
+    store_type ENUM('general', 'clothing', 'shoe'),
+    CONSTRAINT pk_stores PRIMARY KEY (store_ID),
+    CONSTRAINT uk_store_location UNIQUE (store_addr),
+    CONSTRAINT uk_store_phone UNIQUE (store_phone)
 );
 
 DROP TABLE IF EXISTS USERS;
 CREATE TABLE USERS (
-  user_ID    INT(12) NOT NULL,
-  first_name  VARCHAR(15) NOT NULL, 
-  middle_name VARCHAR(15),
-  last_name VARCHAR(15),
-  user_phone INT(10),
-  reward_points INT(5),
-  user_addr VARCHAR(50),
-  user_email VARCHAR(50),
-  CONSTRAINT pk_user PRIMARY KEY (user_ID),
-  CONSTRAINT uk_phone UNIQUE (user_phone)
+    user_ID INT(12) NOT NULL,
+    first_name VARCHAR(15) NOT NULL,
+    middle_name VARCHAR(15),
+    last_name VARCHAR(15),
+    user_phone INT(10),
+    reward_points INT(5),
+    user_addr VARCHAR(50),
+    user_email VARCHAR(50),
+    CONSTRAINT pk_user PRIMARY KEY (user_ID),
+    CONSTRAINT uk_phone UNIQUE (user_phone)
 );
 
 DROP TABLE If EXISTS PURCHASES;
 CREATE TABLE PURCHASES (
-  purchase_ID CHAR(20) NOT NULL,
-  date_purchases DATETIME() NOT NULL,
-  amount DECIMAL(10, 2),
-  reward_earned int(20),
-  shipment_tracking_ID int(20),
-  user_ID int(12) NOT NULL,
-  store_ID int(5)
+    purchase_ID CHAR(20) NOT NULL,
+    date_purchased DATETIME NOT NULL,
+    amount DECIMAL(10 , 2 ),
+    reward_earned INT(20),
+    shipment_tracking_ID INT(20),
+    user_ID INT(12) NOT NULL,
+    store_ID INT(5)
+);
+
+DROP TABLE If EXISTS ITEMS_PURCHASED;
+CREATE TABLE ITEMS_PURCHASED (
+    item_ID INT(20) NOT NULL,
+    purchase_ID CHAR(20) NOT NULL
 );
 
 DROP TABLE If EXISTS TRACKING;
 CREATE TABLE PURCHASES (
-  tracking CHAR(20) NOT NULL,
-  departure DATETIME() NOT NULL,
-  arrival DATETIME(),
-  destination VARCHAR(50),
-  weight DECIMAL(3, 2),
-  user_ID int(12) NOT NULL,
-  store_ID int(5)
+    tracking CHAR(20) NOT NULL,
+    departure DATETIME NOT NULL,
+    arrival DATETIME,
+    destination VARCHAR(50),
+    weight DECIMAL(3 , 2 ),
+    user_ID INT(12) NOT NULL,
+    store_ID INT(5)
 );
+
+DROP TABLE If EXISTS BRANDS;
+CREATE TABLE PURCHASES (
+    brand_ID INT(5) NOT NULL,
+    brand_Name VARCHAR(10) NOT NULL
+);
+
+
