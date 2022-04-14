@@ -32,7 +32,6 @@ CREATE TABLE DEPARTMENT (
     Mgr_ID CHAR(9) NOT NULL,
     store_ID INT NOT NULL,
     CONSTRAINT pk_Department PRIMARY KEY (Dnumber),
-    CONSTRAINT uk_dname UNIQUE (Dname),
     CONSTRAINT uk_storeID UNIQUE (store_ID),
     CONSTRAINT manager FOREIGN KEY (Mgr_ID)
         REFERENCES EMPLOYEE (emp_ID)
@@ -48,7 +47,9 @@ CREATE TABLE STORE (
     store_type ENUM('general', 'clothing', 'shoe'),
     CONSTRAINT pk_stores PRIMARY KEY (store_ID),
     CONSTRAINT uk_store_location UNIQUE (store_addr),
-    CONSTRAINT uk_store_phone UNIQUE (store_phone)
+    CONSTRAINT uk_store_phone UNIQUE (store_phone),
+    CONSTRAINT fk_manager FOREIGN KEY (manager_ID)
+        REFERENCES EMPLOYEE (emp_ID)
 );
 
 DROP TABLE IF EXISTS USERS;
@@ -62,7 +63,21 @@ CREATE TABLE USERS (
     user_addr VARCHAR(50),
     user_email VARCHAR(50),
     CONSTRAINT pk_user PRIMARY KEY (user_ID),
-    CONSTRAINT uk_phone UNIQUE (user_phone)
+    CONSTRAINT uk_phone UNIQUE (user_phone),
+    CONSTRAINT uk_email UNIQUE (user_email)
+);
+
+DROP TABLE If EXISTS TRACKING;
+CREATE TABLE PURCHASES (
+    tracking CHAR(20) NOT NULL,
+    departure DATETIME NOT NULL,
+    arrival DATETIME,
+    destination VARCHAR(50),
+    weight DECIMAL(3 , 2 ),
+    user_ID INT(12) NOT NULL,
+    store_ID INT(5),
+    CONSTRAINT fk_destination FOREIGN KEY (destination)
+        REFERENCES USERS (user_addr)
 );
 
 DROP TABLE If EXISTS PURCHASES;
@@ -76,21 +91,13 @@ CREATE TABLE PURCHASES (
     store_ID INT(5)
 );
 
+/* NO PRIMARY KEY CHECK WITH MICHAEL */
 DROP TABLE If EXISTS ITEMS_PURCHASED;
 CREATE TABLE ITEMS_PURCHASED (
     item_ID INT(20) NOT NULL,
-    purchase_ID CHAR(20) NOT NULL
-);
-
-DROP TABLE If EXISTS TRACKING;
-CREATE TABLE PURCHASES (
-    tracking CHAR(20) NOT NULL,
-    departure DATETIME NOT NULL,
-    arrival DATETIME,
-    destination VARCHAR(50),
-    weight DECIMAL(3 , 2 ),
-    user_ID INT(12) NOT NULL,
-    store_ID INT(5)
+    purchase_ID CHAR(20) NOT NULL,
+    CONSTRAINT fk_purchase FOREIGN KEY (purchase_ID)
+        REFERENCES PURCHASES (purchase_ID)
 );
 
 DROP TABLE If EXISTS BRANDS;
